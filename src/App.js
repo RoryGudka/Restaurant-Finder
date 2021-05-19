@@ -1,15 +1,19 @@
 import { React, useState, useEffect } from 'react';
 import './App.css';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet/dist/leaflet.js';
+import API_KEY from "./keys.js";
 import dummy from './DummyInfo.js';
 
 
 function App() {
   const [options, setOptions] = useState([]);
   const [images, setImages] = useState([]);
+  const [map, setMap] = useState([]);
 /*
   useEffect(() => {
     const url = new URL("https://maps.googleapis.com/maps/api/place/nearbysearch/json");
-    url.searchParams.append("key", "AIzaSyBCMFBFFQb_NoAvgJa3TMWx-S4OSiynaQg");
+    url.searchParams.append("key", API_KEY);
     url.searchParams.append("location", "38.0293,-78.4767");
     url.searchParams.append("type", "restaurant")
     url.searchParams.append("opennow", true);
@@ -24,7 +28,7 @@ function App() {
       let imgArr = [];
       for(let i = 0; i < res.results.length; i++) {
         const url = new URL("https://maps.googleapis.com/maps/api/place/photo");
-        url.searchParams.append("key", "AIzaSyBCMFBFFQb_NoAvgJa3TMWx-S4OSiynaQg");
+        url.searchParams.append("key", API_KEY);
         url.searchParams.append("photoreference", res.results[i].photos[0].photo_reference);
         url.searchParams.append("maxheight", 200);
         
@@ -38,6 +42,11 @@ function App() {
     });
   }, []);
 */
+
+  useEffect(() => {
+    setMap(L.map('map').setView([51.505, -0.09], 13));
+  }, []);
+
   let cur = 0;
   const joined = options.map(obj => ({...obj, "imgURL":images[cur++]}));
   const content = dummy.map(obj => {
@@ -51,6 +60,7 @@ function App() {
   });
   return (
     <div>
+      
       {content}
       
     </div>

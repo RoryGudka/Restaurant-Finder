@@ -14,7 +14,7 @@ class Map {
         if(this.map !== null) {
             this.map.remove();
         }
-        
+
         let map = L.map('map').setView([lat, lng], zoom);
         this.map = map;
 
@@ -44,7 +44,10 @@ class Map {
     }
 
     setMarkers(options) {
+        let markers = [];
         for(let i = 0; i < options.length; i++) {
+            const price = options[i].price_level == undefined ? "" : options[i].price_level === 1 ? "$" : options[i].price_level === 2 ? "$$" : options[i].price_level === 3 ? "$$$" : options[i].price_level === 4 ? "$$$$" : "";
+            const rating = (5 - options[i].rating) / 0.05;
             let type = "";
             for(let j = 0; j < options[i].types.length; j++) {
                 if(options[i].types[j] == "restaurant") type = "utensils";
@@ -60,8 +63,10 @@ class Map {
                 markerColor: 'red'
             });
             const marker = L.marker([options[i].geometry.location.lat, options[i].geometry.location.lng], {icon: redMarker}).addTo(this.map);
-            marker.bindPopup(options[i].name + "<br>" + options[i].rating + "<br>" + options[i].price_level);
+            marker.bindPopup('<b>' + options[i].name + '</b><br>' + '<div class="starContainer"><img src="stars.jpg" class="stars"><div class="starCover" style="width:' + rating + '%"></div></div>' + '(' + options[i].rating + ') ' + price);
+            markers.push(marker);
         } 
+        return markers;
     }
 
     

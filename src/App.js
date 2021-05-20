@@ -3,6 +3,7 @@ import {API_KEY} from "./keys.js";
 import dummy from './DummyInfo.js';
 import { React, useState, useEffect } from 'react';
 import Map from './map.js';
+import Collection from './collection.js';
 
 
 
@@ -10,6 +11,7 @@ function App() {
   const [options, setOptions] = useState([]);
   const [images, setImages] = useState([]);
   const [map, setMap] = useState(null);
+  const [markers, setMarkers] = useState([]);
 
 /*
   useEffect(() => {
@@ -57,28 +59,17 @@ function App() {
 
   useEffect(() => {
     if(options.length !== 0 && map !== null) {
-      map.setMarkers(options);
+      setMarkers(map.setMarkers(options));
     }
   }, [map, options]);
 
 
-
+//"imgURL":images[cur],
   let cur = 0;
-  const joined = options.map(obj => ({...obj, "imgURL":images[cur++]}));
-  const content = dummy.map(obj => {
-    const price = obj.price_level == undefined ? "" : obj.price_level === 1 ? "$" : obj.price_level === 2 ? "$$" : obj.price_level === 3 ? "$$$" : obj.price_level === 4 ? "$$$$" : "";
-    return(
-      <div>
-        <li>{obj.name}: {obj.rating} stars, {price}</li>
-        <img src={obj.imgURL} />
-      </div>
-    )
-  });
+  const joined = options.map(obj => ({...obj,  "marker":markers[cur++]}));
   return (
     <div>
-      
-      {content}
-      
+      <Collection data={joined} />
     </div>
   );
 }

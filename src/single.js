@@ -8,15 +8,17 @@ const Single = props => {
     return (
         <div onClick={() => {
             props.data.marker.openPopup();
-            props.data.marker._map.setView([props.data.marker._latlng.lat, props.data.marker._latlng.lng], 18)
+            props.data.marker._map.setView([props.data.marker._latlng.lat, props.data.marker._latlng.lng], 18);
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
         }}> 
             <Paper style={{borderRadius:'10px', margin:'40px 0'}} elevation={3}>
                 <img className="photo" src={props.data.imgURL} />
                 <div style={{padding:'5px'}}>
                     <p style={{margin:'5px'}}><b>{props.data.name}</b></p>
-                    <div class="starContainer" style={{margin:'5px'}}>
-                        <img src="stars.jpg" class="stars" />
-                        <div class="starCover" style={{width:rating + '%'}}></div>
+                    <div className="starContainer" style={{margin:'5px'}}>
+                        <img src="stars.jpg" className="stars" />
+                        <div className="starCover" style={{width:rating + '%'}}></div>
                     </div> 
                     <p style={{display:"inline-block", margin:'5px'}}>({props.data.rating}) {price}</p>
                 </div>

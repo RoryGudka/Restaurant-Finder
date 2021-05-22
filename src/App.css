@@ -3,18 +3,18 @@
 }
 
 #map {
+  position:absolute;
+  right:40px;
   height:400px;
-  width:100%;
+  width:400px;
+  border-radius:200px;
+  border:2px solid black;
+  z-index:2;
   /*
   position:fixed;
   z-index:2;
   */
 }
-/*
-#collection {
-  top:250px;
-}
-*/
 
 .starContainer {
   display:inline-block;
@@ -60,4 +60,47 @@
 .singleCover:hover {
   background-color:rgb(0,0,0,0.05);
   cursor:pointer;
+}
+
+#searchItemsWrapper {
+  text-align:center;
+  width:60%;
+  margin:40px;
+  padding:10px;
+}
+
+#addressWrapper {
+  display:inline-block;
+  width:90%;
+  margin:20px;
+}
+
+#typeWrapper {
+  display:inline-block;
+  width:43%;
+  margin:20px;
+  text-align:left;
+}
+
+#keywordWrapper {
+  display:inline-block;
+  width:43%;
+  margin:20px;
+}
+
+#radiusWrapper {
+  display:inline-block;
+  width:43%;
+  margin:20px;
+}
+
+#priceWrapper {
+  display:inline-block;
+  width:43%;
+  margin:20px;
+}
+
+#searchWrapper {
+  display:inline-block;
+ margin-bottom:30px;
 }

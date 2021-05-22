@@ -14,19 +14,29 @@ function App() {
   const [map, setMap] = useState(null);
   const [markers, setMarkers] = useState([]);
 
-  /*
-  useEffect(() => {
-    Places.search(38.0293, -78.4767, 5000, "restaurant", setOptions, setImages)
-  }, []);
-  */
+  const showDirections = (e) => {
+    Places.getDirections(e.detail.oLat, e.detail.oLng, e.detail.dLat, e.detail.dLng).then(points => {
+      map.showDirections(points);
+    })
+  }
   
   useEffect(() => {
-    console.log(Places.addressToGeocode("charlottesville"))
     let map = new Map();
-    map.createMap(38.0293, -78.4767, 13)
+    map.createMap(38.0293, -78.4767, 13, 8046.7);
+    Places.search(38.0293, -78.4767, 5, "restaurant", "", [0, 4], setOptions, setImages, map)
     setMap(map);
-    setOptions(dummy);
+    document.addEventListener('showDirections', showDirections);
+    return () => {
+      document.removeEventListener('showDirections', showDirections);
+    }
   }, []);
+
+  useEffect(() => {
+    document.addEventListener('showDirections', showDirections);
+    return () => {
+      document.removeEventListener('showDirections', showDirections);
+    }
+  }, [map])
 
   useEffect(() => {
     if(options.length !== 0 && map !== null) {
@@ -36,10 +46,10 @@ function App() {
 
   //"imgURL":images[cur],
   let cur = 0;
-  const joined = options.map(obj => ({...obj, "marker":markers[cur++]}));
+  const joined = options.map(obj => ({...obj, "imgURL":images[cur], "marker":markers[cur++]}));
   return (
     <div>
-      <Search />
+      <Search map={map} Places={Places} setOptions={setOptions} setImages={setImages} />
       <Collection data={joined} />
     </div>
   );

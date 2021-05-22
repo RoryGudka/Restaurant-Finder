@@ -104,3 +104,11 @@
   display:inline-block;
  margin-bottom:30px;
 }
+
+.directionsLink {
+  color:blue;
+  margin:0 !important;
+}
+.directionsLink:hover {
+  cursor:pointer;
+}

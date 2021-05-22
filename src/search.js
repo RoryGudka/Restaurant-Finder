@@ -17,8 +17,8 @@ const Search = props => {
 
 
     const radiusMarks = [
-        {value:1, label:"1 Mile"},
-        {value:60, label:"60 Miles"}
+        {value:0, label:"0 Miles"},
+        {value:30, label:"30 Miles"}
     ]
     const priceMarks = [
         {value:0, label:"0"},
@@ -42,12 +42,15 @@ const Search = props => {
                 </Select>
             </div>
             <div id="keywordWrapper">
-                <TextField fullWidth style={{marginTop:'-18px'}} label="Keywords" value={keyword} onChange={e=>setKeyword(e.target.value)} />
+                <TextField fullWidth style={{marginTop:'-18px'}} label="Keywords" value={keyword} onChange={e => setKeyword(e.target.value)} />
             </div>
             <br></br>
             <div id="radiusWrapper">
                 <Typography id="radiusSlider" gutterBottom>Radius</Typography>
-                <Slider min={1} max={60} value={radius} onChange={(e, val)=>setRadius(val)} valueLabelDisplay="auto" aria-labelledby="radiusSlider" marks={radiusMarks} />
+                <Slider min={0.25} max={30} step={0.25} value={radius} valueLabelDisplay="auto" aria-labelledby="radiusSlider" marks={radiusMarks} onChange={(e, val)=>{
+                    props.map.setRadius(val * 1609.34);
+                    setRadius(val);
+                    }} />
             </div>
             <div id="priceWrapper">
                 <Typography id="priceSlider" gutterBottom>Price</Typography>
@@ -55,7 +58,10 @@ const Search = props => {
             </div>
             <br></br>
             <div id='searchWrapper'>
-                <Button variant="contained" color="primary">Search</Button>
+                <Button variant="contained" color="primary" onClick={() => {
+                    const typeStr = type === 0 ? "restaurant" : type === 1 ? "cafe" : "bar";
+                    props.Places.searchByAddress(address, radius, typeStr, keyword, price, props.setOptions, props.setImages, props.map);
+                }}>Search</Button>
             </div>
         </Paper>
     )

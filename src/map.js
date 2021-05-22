@@ -8,9 +8,16 @@ import {MAP_KEY} from "./keys.js";
 class Map {
     constructor() {
         this.map = null;
+        this.circle = null;
+        this.lat = null;
+        this.lng = null;
+        this.poly = null;
     }
 
-    createMap(lat, lng, zoom) {
+    createMap(lat, lng, zoom, radius) {
+        this.lat = lat;
+        this.lng = lng;
+
         if(this.map !== null) {
             this.map.remove();
         }
@@ -35,12 +42,14 @@ class Map {
         });
         const marker = L.marker([lat, lng], {icon: redMarker}).addTo(map);
         marker.bindPopup("Current Location");
+
         var circle = L.circle([lat, lng], {
             color: 'lightblue',
             fillColor: '#00f',
             fillOpacity: 0.05,
-            radius: 5000
+            radius: radius * 1.35
         }).addTo(map);
+        this.circle = circle;
     }
 
     setMarkers(options) {
@@ -63,13 +72,25 @@ class Map {
                 markerColor: 'red'
             });
             const marker = L.marker([options[i].geometry.location.lat, options[i].geometry.location.lng], {icon: redMarker}).addTo(this.map);
-            marker.bindPopup('<b>' + options[i].name + '</b><br>' + '<div class="starContainer"><img src="stars.jpg" class="stars"><div class="starCover" style="width:' + rating + '%"></div></div>' + '(' + options[i].rating + ') ' + price);
+            var evt = document.createEvent("Event");
+            evt.initEvent("myEvent",true,true);
+            evt.foo = "bar";
+            document.dispatchEvent(evt);
+            const showDirectionsHTML = "const evt = new CustomEvent('showDirections', {detail: {oLat:" +  this.lat + ",oLng:" + this.lng + ",dLat:" + options[i].geometry.location.lat + ",dLng:" + options[i].geometry.location.lng + "}});document.dispatchEvent(evt);";
+            const directionsHTML = "<p class='directionsLink' onclick=\"" + showDirectionsHTML + "\"><u>Show Directions</u></p>";
+            marker.bindPopup('<b>' + options[i].name + '</b><br>' + '<div class="starContainer"><img src="stars.jpg" class="stars"><div class="starCover" style="width:' + rating + '%"></div></div>' + '(' + options[i].rating + ') ' + price + directionsHTML);
             markers.push(marker);
         } 
         return markers;
     }
 
-    
-}
+    setRadius(radius) {
+        this.circle.setRadius(radius * 1.35);
+    }
 
+    showDirections(points) {
+        if(this.poly !== null) this.poly.remove()
+        this.poly = L.polyline(points).addTo(this.map);
+    }
+}
 export default Map;

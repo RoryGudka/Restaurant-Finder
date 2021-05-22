@@ -3,8 +3,6 @@ import Paper from '@material-ui/core/Paper';
 const Single = props => {
     const rating = (5 - props.data.rating) / 0.05;
     const price = props.data.price_level == undefined ? "" : props.data.price_level === 1 ? "$" : props.data.price_level === 2 ? "$$" : props.data.price_level === 3 ? "$$$" : props.data.price_level === 4 ? "$$$$" : "";
-    console.log(rating);
-    console.log(props);
     return (
         <div onClick={() => {
             props.data.marker.openPopup();

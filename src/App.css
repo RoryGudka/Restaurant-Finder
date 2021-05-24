@@ -5,9 +5,9 @@
 #map {
   position:absolute;
   right:40px;
-  height:400px;
+  height:385px;
   width:400px;
-  border-radius:200px;
+  border-radius:20px;
   border:2px solid black;
   z-index:2;
   /*

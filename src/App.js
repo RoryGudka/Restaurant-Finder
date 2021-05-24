@@ -1,9 +1,9 @@
 import './App.css';
-import dummy from './DummyInfo.js';
 import { React, useState, useEffect } from 'react';
 import Places from './places.js';
 import Map from './map.js';
 import Search from './search.js';
+import Sort from './sort.js';
 import Collection from './collection.js';
 
 
@@ -13,6 +13,7 @@ function App() {
   const [images, setImages] = useState([]);
   const [map, setMap] = useState(null);
   const [markers, setMarkers] = useState([]);
+  const [nextPage, setNextPage] = useState("");
 
   const showDirections = (e) => {
     Places.getDirections(e.detail.oLat, e.detail.oLng, e.detail.dLat, e.detail.dLng).then(points => {
@@ -23,12 +24,8 @@ function App() {
   useEffect(() => {
     let map = new Map();
     map.createMap(38.0293, -78.4767, 13, 8046.7);
-    Places.search(38.0293, -78.4767, 5, "restaurant", "", [0, 4], setOptions, setImages, map)
+    Places.search(38.0293, -78.4767, 5, "restaurant", "", [0, 4], setOptions, setImages, map, setNextPage)
     setMap(map);
-    document.addEventListener('showDirections', showDirections);
-    return () => {
-      document.removeEventListener('showDirections', showDirections);
-    }
   }, []);
 
   useEffect(() => {
@@ -44,12 +41,12 @@ function App() {
     }
   }, [map, options]);
 
-  //"imgURL":images[cur],
   let cur = 0;
   const joined = options.map(obj => ({...obj, "imgURL":images[cur], "marker":markers[cur++]}));
   return (
     <div>
-      <Search map={map} Places={Places} setOptions={setOptions} setImages={setImages} />
+      <Search map={map} Places={Places} setOptions={setOptions} setImages={setImages} setNextPage={setNextPage} />
+      <Sort nextPage={nextPage} setNextPage={setNextPage} loadMore={Places.loadMore} lat={map !== null && map.lat} lng={map !== null && map.lng} options={options} images={images} setOptions={setOptions} setImages={setImages} />
       <Collection data={joined} />
     </div>
   );

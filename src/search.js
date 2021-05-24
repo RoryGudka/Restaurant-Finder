@@ -60,7 +60,7 @@ const Search = props => {
             <div id='searchWrapper'>
                 <Button variant="contained" color="primary" onClick={() => {
                     const typeStr = type === 0 ? "restaurant" : type === 1 ? "cafe" : "bar";
-                    props.Places.searchByAddress(address, radius, typeStr, keyword, price, props.setOptions, props.setImages, props.map);
+                    props.Places.searchByAddress(address, radius, typeStr, keyword, price, props.setOptions, props.setImages, props.map, props.setNextPage);
                 }}>Search</Button>
             </div>
         </Paper>

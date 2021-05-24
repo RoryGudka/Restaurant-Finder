@@ -112,3 +112,17 @@
 .directionsLink:hover {
   cursor:pointer;
 }
+
+#sortLabel {
+  display:inline-block;
+  margin-right:20px;
+  font-size:20px;
+}
+
+#loadMoreWrapper {
+  position:absolute;
+  right:10%;
+  top:20px;
+  display:inline-block;
+  margin-left:60px;
+}

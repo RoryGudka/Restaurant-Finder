@@ -47,7 +47,7 @@ class Map {
             color: 'lightblue',
             fillColor: '#00f',
             fillOpacity: 0.05,
-            radius: radius * 1.35
+            radius: radius
         }).addTo(map);
         this.circle = circle;
     }
@@ -85,7 +85,7 @@ class Map {
     }
 
     setRadius(radius) {
-        this.circle.setRadius(radius * 1.35);
+        this.circle.setRadius(radius);
     }
 
     showDirections(points) {

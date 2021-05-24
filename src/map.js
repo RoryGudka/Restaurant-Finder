@@ -3,6 +3,7 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet/dist/leaflet.js';
 import 'leaflet.awesome-markers/dist/leaflet.awesome-markers.css';
 import 'leaflet.awesome-markers/dist/leaflet.awesome-markers.js';
+import Polyline from '@mapbox/polyline';
 import {MAP_KEY} from "./keys.js";
 
 class Map {
@@ -52,7 +53,10 @@ class Map {
         this.circle = circle;
     }
 
-    setMarkers(options) {
+    setMarkers(options, oldMarkers) {
+        for(let j = 0; j < oldMarkers.length; j++) {
+            this.map.removeLayer(oldMarkers[j]);
+        }
         let markers = [];
         for(let i = 0; i < options.length; i++) {
             const price = options[i].price_level === undefined ? "" : options[i].price_level === 1 ? "$" : options[i].price_level === 2 ? "$$" : options[i].price_level === 3 ? "$$$" : options[i].price_level === 4 ? "$$$$" : "";
@@ -76,10 +80,19 @@ class Map {
             evt.initEvent("myEvent",true,true);
             evt.foo = "bar";
             document.dispatchEvent(evt);
-            const showDirectionsHTML = "const evt = new CustomEvent('showDirections', {detail: {oLat:" +  this.lat + ",oLng:" + this.lng + ",dLat:" + options[i].geometry.location.lat + ",dLng:" + options[i].geometry.location.lng + "}});document.dispatchEvent(evt);";
+            let poly = Polyline.decode(options[i].poly.points);
+            let newStr = "[";
+            for(let j = 0; j < poly.length; j++) {
+                newStr += "[" + poly[j] + "],";
+            }
+            newStr = newStr.substring(0, newStr.length - 1);
+            newStr += "]";
+            const showDirectionsHTML = "const evt = new CustomEvent('showDirections', {detail: {poly:\'" + newStr + "\'}});document.dispatchEvent(evt);";
             const directionsHTML = "<p class='directionsLink' onclick=\"" + showDirectionsHTML + "\"><u>Show Directions</u></p>";
-            marker.bindPopup('<b>' + options[i].name + '</b><br>' + '<div class="starContainer"><img src="stars.jpg" class="stars"><div class="starCover" style="width:' + rating + '%"></div></div>' + '(' + options[i].rating + ') ' + price + directionsHTML);
+            marker.bindPopup('<b>' + options[i].name + '</b><br>' + '<div class="starContainer"><img src="stars.jpg" class="stars"><div class="starCover" style="width:' + rating + '%"></div></div>' + '(' + options[i].rating + ') ' + price + " " + options[i].distText + directionsHTML);
             markers.push(marker);
+            
+            
         } 
         return markers;
     }

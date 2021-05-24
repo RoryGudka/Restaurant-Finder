@@ -9,36 +9,41 @@ const Sort = props => {
 
     useEffect(() => {
         let different = false;
-        if(options.length === props.options.length) {
-            for(let i = 0; i < options.length; i++) {
-                let found = false;
-                for(let j = 0; j < props.options.length; j++) {
-                    if(options[i].name === props.options[j].name) found = true;
+        
+        if(props.images.length === props.options.length && props.distances.length === props.options.length) {
+            if(options.length === props.options.length) {
+                for(let i = 0; i < options.length; i++) {
+                    let found = false;
+                    for(let j = 0; j < props.options.length; j++) {
+                        if(options[i].name === props.options[j].name) found = true;
+                    }
+                    if(!found) different = true;
                 }
-                if(!found) different = true;
+                if(different) {
+                    setOptions(props.options);
+                    if(selection === "rating") sortByRating();
+                    else sortByDistance();
+                }
             }
-            if(different) {
+            else {
                 setOptions(props.options);
                 if(selection === "rating") sortByRating();
                 else sortByDistance();
             }
         }
-        else {
-            setOptions(props.options);
-            if(selection === "rating") sortByRating();
-            else sortByDistance();
-        }
-    }, [props.options])
+    })
 
     const sortByRating = () => {
         let newOptions = [];
         let newImages = [];
-        for(let i = 0; i < props.options.length; i++) {
+        let newDistances = [];
+        for(let i = 0; i < props.joined.length; i++) {
             let placed = false;
             for(let j = 0; j < newOptions.length; j++) {
-                if(props.options[i].rating > newOptions[j].rating) {
+                if(props.joined[i].rating > newOptions[j].rating) {
                     newOptions.splice(j, 0, props.options[i]);
                     newImages.splice(j, 0, props.images[i]);
+                    newDistances.splice(j, 0, props.distances[i]);
                     j = newOptions.length;
                     placed = true;
                 }
@@ -46,23 +51,25 @@ const Sort = props => {
             if(!placed) {
                 newOptions.push(props.options[i]);
                 newImages.push(props.images[i]);
+                newDistances.push(props.distances[i]);
             }
         }
         props.setOptions(newOptions);
         props.setImages(newImages);
+        props.setDistances(newDistances);
     }
 
     const sortByDistance = () => {
         let newOptions = [];
         let newImages = [];
-        for(let i = 0; i < props.options.length; i++) {
+        let newDistances = [];
+        for(let i = 0; i < props.joined.length; i++) {
             let placed = false;
-            for(let j = 0; j < newOptions.length; j++) {
-                const curDist = Math.sqrt(Math.pow(props.options[i].geometry.location.lat - props.lat, 2) + Math.pow(props.options[i].geometry.location.lng - props.lng, 2));
-                const newDist = Math.sqrt(Math.pow(newOptions[j].geometry.location.lat - props.lat, 2) + Math.pow(newOptions[j].geometry.location.lng - props.lng, 2));
-                if(curDist < newDist) {
+            for(let j = 0; j < newDistances.length; j++) {
+                if(props.joined[i].distVal < newDistances[j].value) {
                     newOptions.splice(j, 0, props.options[i]);
                     newImages.splice(j, 0, props.images[i]);
+                    newDistances.splice(j, 0, props.distances[i]);
                     j = newOptions.length;
                     placed = true;
                 }
@@ -70,21 +77,25 @@ const Sort = props => {
             if(!placed) {
                 newOptions.push(props.options[i]);
                 newImages.push(props.images[i]);
+                newDistances.push(props.distances[i]);
             }
         }
         props.setOptions(newOptions);
         props.setImages(newImages);
+        props.setDistances(newDistances);
     }
 
     const sortByName = () => {
         let newOptions = [];
         let newImages = [];
-        for(let i = 0; i < props.options.length; i++) {
+        let newDistances = [];
+        for(let i = 0; i < props.joined.length; i++) {
             let placed = false;
             for(let j = 0; j < newOptions.length; j++) {
-                if(props.options[i].name < newOptions[j].name) {
+                if(props.joined[i].name < newOptions[j].name) {
                     newOptions.splice(j, 0, props.options[i]);
                     newImages.splice(j, 0, props.images[i]);
+                    newDistances.splice(j, 0, props.distances[i]);
                     j = newOptions.length;
                     placed = true;
                 }
@@ -92,10 +103,12 @@ const Sort = props => {
             if(!placed) {
                 newOptions.push(props.options[i]);
                 newImages.push(props.images[i]);
+                newDistances.push(props.distances[i]);
             }
         }
         props.setOptions(newOptions);
         props.setImages(newImages);
+        props.setDistances(newDistances);
     }
 
     
@@ -121,7 +134,7 @@ const Sort = props => {
             </div>
             <div id="loadMoreWrapper">
                 <Button variant="contained" color="primary" onClick={() => {
-                    props.loadMore(props.nextPage, props.setNextPage, props.options, props.setOptions, props.images, props.setImages)
+                    props.loadMore(props.nextPage, props.setNextPage, props.options, props.setOptions, props.images, props.setImages, props.distances, props.setDistances);
                 }}>Load More Results</Button>
             </div>
         </div>

@@ -19,6 +19,7 @@ const Single = props => {
                         <div className="starCover" style={{width:rating + '%'}}></div>
                     </div> 
                     <p style={{display:"inline-block", margin:'5px'}}>({props.data.rating}) {price}</p>
+                    <p style={{display:"inline-block", margin:'5px'}}>{props.data.distText}</p>
                 </div>
             </Paper>
             <div className="singleCover"></div>

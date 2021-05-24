@@ -8,20 +8,18 @@ const Sort = props => {
     const [options, setOptions] = useState(props.options);
 
     useEffect(() => {
-        console.log("test");
         let different = false;
         if(options.length === props.options.length) {
             for(let i = 0; i < options.length; i++) {
                 let found = false;
                 for(let j = 0; j < props.options.length; j++) {
-                    if(options[i].name == props.options[j].name) found = true;
+                    if(options[i].name === props.options[j].name) found = true;
                 }
                 if(!found) different = true;
-                console.log(found);
             }
             if(different) {
                 setOptions(props.options);
-                if(selection == "rating") sortByRating();
+                if(selection === "rating") sortByRating();
                 else sortByDistance();
             }
         }
@@ -30,7 +28,7 @@ const Sort = props => {
             if(selection === "rating") sortByRating();
             else sortByDistance();
         }
-    })
+    }, [props.options])
 
     const sortByRating = () => {
         let newOptions = [];

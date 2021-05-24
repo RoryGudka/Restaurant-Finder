@@ -12,8 +12,8 @@ class Places {
         url.searchParams.append("opennow", true);
         url.searchParams.append("radius", meterRadius);
         url.searchParams.append("keyword", keyword);
-        if(price[0] != 0) url.searchParams.append("minprice", price[0]);
-        if(price[1] != 4) url.searchParams.append("maxprice", price[1]);
+        if(price[0] !== 0) url.searchParams.append("minprice", price[0]);
+        if(price[1] !== 4) url.searchParams.append("maxprice", price[1]);
         
         fetch(url).then(res => {
             return res.json();
@@ -55,7 +55,7 @@ class Places {
         fetch(url).then(response => {
             return response.json();
         }).then(response => {
-            if(response.status == "OK") this.search(response.results[0].geometry.location.lat, response.results[0].geometry.location.lng, radius, type, keyword, price, setOptions, setImages, map, setNextPage);
+            if(response.status === "OK") this.search(response.results[0].geometry.location.lat, response.results[0].geometry.location.lng, radius, type, keyword, price, setOptions, setImages, map, setNextPage);
             else alert("Search failed or returned zero results");
         });
     }
@@ -74,11 +74,9 @@ class Places {
     }
 
     static loadMore(nextPage, setNextPage, options, setOptions, images, setImages) {
-        console.log(nextPage);
         const url = new URL("https://maps.googleapis.com/maps/api/place/nearbysearch/json");
         url.searchParams.append("key", API_KEY);
         url.searchParams.append("pagetoken", nextPage);
-        console.log(url.href);
         fetch(url.href).then(res => {
             return res.json();
         }).then(res => {

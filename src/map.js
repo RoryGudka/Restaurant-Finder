@@ -55,13 +55,13 @@ class Map {
     setMarkers(options) {
         let markers = [];
         for(let i = 0; i < options.length; i++) {
-            const price = options[i].price_level == undefined ? "" : options[i].price_level === 1 ? "$" : options[i].price_level === 2 ? "$$" : options[i].price_level === 3 ? "$$$" : options[i].price_level === 4 ? "$$$$" : "";
+            const price = options[i].price_level === undefined ? "" : options[i].price_level === 1 ? "$" : options[i].price_level === 2 ? "$$" : options[i].price_level === 3 ? "$$$" : options[i].price_level === 4 ? "$$$$" : "";
             const rating = (5 - options[i].rating) / 0.05;
             let type = "";
             for(let j = 0; j < options[i].types.length; j++) {
-                if(options[i].types[j] == "restaurant") type = "utensils";
-                else if(options[i].types[j] == "cafe") type = "coffee";
-                else if(options[i].types[j] == "bar") type = "beer";
+                if(options[i].types[j] === "restaurant") type = "utensils";
+                else if(options[i].types[j] === "cafe") type = "coffee";
+                else if(options[i].types[j] === "bar") type = "beer";
                 if(type !== "") j = options[i].types.length;
             }
             if(type === "") type = "utensils";
